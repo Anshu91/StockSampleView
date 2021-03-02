@@ -23,7 +23,8 @@ namespace StockView.Presenters
         public StockPresenter(MainWindow view)
         {
             this.view = view;
-            service = new StockService();
+            var restService = new RestService();
+            service = new StockService(restService);
             SetTimer();
         }
 

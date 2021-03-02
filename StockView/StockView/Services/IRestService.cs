@@ -2,8 +2,9 @@
 
 namespace StockView.Services
 {
-    public interface IService
+    public interface IRestService
     {
         Task<string> GetContentFromRestCall(string url);
+        string GetAPIKey();
     }
 }

@@ -74,8 +74,8 @@
     <Compile Include="Models\ErrorResponse.cs" />
     <Compile Include="Models\SearchResponse.cs" />
     <Compile Include="Models\StockItems.cs" />
-    <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\RestService.cs" />
+    <Compile Include="Services\IRestService.cs" />
     <Compile Include="Services\StockService.cs" />
     <Compile Include="Presenters\StockPresenter.cs" />
     <Compile Include="Utilities\Constants.cs" />

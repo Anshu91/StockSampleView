@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace StockView.Services
 {
-    public abstract class BaseService : IService
+    public class RestService : IRestService
     {
         private int _apiCount = -1;
         private int _exceptionCount = 0;
