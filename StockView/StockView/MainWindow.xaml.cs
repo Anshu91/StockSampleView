@@ -104,6 +104,7 @@ namespace StockView
             }
             else
             {
+                PrintStockDataIntoConsole(stocks);
                 var rowCount = 0;
                 var columns = Constants.NumberOfWaitListItemColumns;
 
@@ -180,8 +181,21 @@ namespace StockView
                     rowCount++;
                 }
             }
+            SetControlsVisibiltyAfterLoad(isWatchList);
+        }
+
+        private void PrintStockDataIntoConsole(List<StockItems> stocks)
+        {
+            var stock = stocks.FirstOrDefault();
+            {
+                Console.WriteLine($"=========time = {DateTime.Now:HH:mm:ss.fff}, symbol = {stock.symbol}, Price ={stock.price}");
+            }
+        }
+
+        private void SetControlsVisibiltyAfterLoad(bool isWatchList)
+        {
             LoadingLabel.Visibility = Visibility.Collapsed;
-            WatchListButton.Visibility = isWatchList? Visibility.Collapsed: Visibility.Visible;
+            WatchListButton.Visibility = isWatchList ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public async Task UpdateStockDataIntoSearchGrid(List<SearchResponse> stocks)

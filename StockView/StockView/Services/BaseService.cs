@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StockView.Utilities;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -11,6 +12,8 @@ namespace StockView.Services
     {
         private int _apiCount = -1;
         private int _exceptionCount = 0;
+        private string lastContent = string.Empty;
+        private int apiKeyIndex = 0;
         public async Task<string> GetContentFromRestCall(string url)
         {
             using (var httpClient = new HttpClient())
@@ -27,11 +30,12 @@ namespace StockView.Services
 
                         {
                             request.Headers.TryAddWithoutValidation("Upgrade-Insecure-Requests", "1");
-                            Console.WriteLine($"start time={DateTime.Now:HH:mm:ss.fff}");
+                            //Console.WriteLine($"start time={DateTime.Now:HH:mm:ss.fff}");
                             var response = await httpClient.SendAsync(request);
                             content = await response.Content.ReadAsStringAsync();
-                            Console.WriteLine($"stop time={DateTime.Now:HH:mm:ss.fff}");
+                            //Console.WriteLine($"stop time={DateTime.Now:HH:mm:ss.fff}");
                             //File.WriteAllText(savedResponseInFile, content);
+                            lastContent = content;
                             return content;
                         }
                     }
@@ -45,18 +49,26 @@ namespace StockView.Services
                     if (!string.IsNullOrEmpty(content))
                     {
                         var result = JsonConvert.DeserializeObject<JsonException>(content);
-                        MessageBox.Show(result.Message);
+                        //MessageBox.Show(result.Message);
                     }
                     _exceptionCount++;
-                    if (_exceptionCount == 3)
-                    {
-                        MessageBox.Show(ex.Message);
-                        Environment.Exit(-1);
-                    }
-                    throw;
+                    ChangeAPIKey();
+                    return lastContent;
+                    
                 }
             }
 
+        }
+
+        private void ChangeAPIKey()
+        {
+            apiKeyIndex++;
+            apiKeyIndex %= 4;
+        }
+
+        public string GetAPIKey()
+        {
+            return Constants.ApiKeys[apiKeyIndex];
         }
     }
 }

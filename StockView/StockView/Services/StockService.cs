@@ -4,9 +4,7 @@ using StockView.Models;
 using StockView.Utilities;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -22,7 +20,7 @@ namespace StockView.Services
                 testQuery = $"{testQuery},{stock}";
             }
             testQuery = testQuery.TrimStart(',');
-            var requestUrl = $"https://financialmodelingprep.com/api/v3/quote/{testQuery}?apikey={Constants.ApiKey}";
+            var requestUrl = $"https://financialmodelingprep.com/api/v3/quote/{testQuery}?apikey={GetAPIKey()}";
             try
             {
                 var content = await GetContentFromRestCall(requestUrl);
@@ -37,7 +35,7 @@ namespace StockView.Services
 
         public async Task<List<SearchResponse>> SearchStocks(string name)
         {
-            var requestUrl = $"https://financialmodelingprep.com/api/v3/search?query={name}&limit={Constants.MaxResponse}&apikey={Constants.ApiKey}";
+            var requestUrl = $"https://financialmodelingprep.com/api/v3/search?query={name}&limit={Constants.MaxResponse}&apikey={GetAPIKey()}";
             try
             {
                 var content = await GetContentFromRestCall(requestUrl);
