@@ -77,7 +77,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\StockService.cs" />
-    <Compile Include="Presenter\StockPresenter.cs" />
+    <Compile Include="Presenters\StockPresenter.cs" />
     <Compile Include="Utilities\Constants.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

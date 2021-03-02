@@ -18,6 +18,7 @@ namespace StockView.Presenters
         private readonly MainWindow view;
         private string[] currentStockListTodisplay = ConfiguredStocks.Stocks;
         private bool isDashboardView = true;
+        private int lastResponseTimeStamp;
 
         public StockPresenter(MainWindow view)
         {
@@ -30,7 +31,7 @@ namespace StockView.Presenters
         {
             updateTimer = new Timer(timerInterval);
             updateTimer.Elapsed += OnTimedEvent;
-            updateTimer.AutoReset = false;
+            updateTimer.AutoReset = true;
             EnableTimer();
         }
 
@@ -53,23 +54,30 @@ namespace StockView.Presenters
         {
             service.AddToConfiguredStocks(symbol);
             await SwitchToDashBoard();
-            OnTimedEvent(null, null);
+            StartTimer();
         }
 
         public async void DeleteFromConfiguredStocks(string symbol)
         {
             service.DeleteFromConfiguredStocks(symbol);
             await SwitchToDashBoard();
-            OnTimedEvent(null, null);
+            StartTimer();
         }
 
         public async void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             var stocks = FilterInvalidStocks((await service.GetStocksInBatch(currentStockListTodisplay)).ToList());
-            view.Dispatcher.Invoke(() =>
+            var currentTimeStamp = stocks?.FirstOrDefault()?.timestamp;
+            if (true)//(currentTimeStamp.HasValue && currentTimeStamp.Value>lastResponseTimeStamp)
             {
-                view.UpdateStockDataIntoGrid(stocks, isDashboardView);
-            });
+                
+                //lastResponseTimeStamp = currentTimeStamp.Value;
+                view.Dispatcher.Invoke(() =>
+                {
+                    view.UpdateStockDataIntoGrid(stocks, isDashboardView);
+                });
+
+            }
         }
 
         private List<StockItems> FilterInvalidStocks(List<StockItems> stocks)
@@ -81,14 +89,18 @@ namespace StockView.Presenters
         {
             currentStockListTodisplay = stockList.ToArray();
             isDashboardView = false;
-            OnTimedEvent(null, null);
-            EnableTimer();
+            StartTimer();
         }
 
         public async Task SwitchToDashBoard()
         {
             currentStockListTodisplay = ConfiguredStocks.Stocks;
             isDashboardView = true;
+            StartTimer();
+        }
+
+        private void StartTimer()
+        {
             OnTimedEvent(null, null);
             EnableTimer();
         }
