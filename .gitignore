@@ -1,0 +1,10 @@
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+Output/
+*.suo
+*.user
+*.sln.docstates
+.vs/
+StockView/packages/
